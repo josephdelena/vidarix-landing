@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -42,8 +43,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:cen
 
 /* LANDING */
 .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:120px 0 80px;overflow:hidden;position:relative}
-.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(26,60,255,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(26,60,255,0.05) 1px,transparent 1px);background-size:56px 56px;mask-image:radial-gradient(ellipse 80% 70% at 50% 30%,black 20%,transparent 100%)}
-.hero-glow{position:absolute;top:5%;left:50%;transform:translateX(-50%);width:700px;height:320px;background:radial-gradient(ellipse,rgba(26,60,255,0.14) 0%,transparent 70%);pointer-events:none}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(26,60,255,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(26,60,255,0.05) 1px,transparent 1px);background-size:56px 56px;mask-image:radial-gradient(ellipse 80% 70% at 50% 30%,black 20%,transparent 100%);pointer-events:none;z-index:0}
+.hero-glow{position:absolute;top:5%;left:50%;transform:translateX(-50%);width:700px;height:320px;background:radial-gradient(ellipse,rgba(26,60,255,0.14) 0%,transparent 70%);pointer-events:none;z-index:0}
 .pill{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:0.06em;color:var(--mint);border:0.5px solid rgba(0,229,180,0.3);padding:6px 14px;border-radius:100px;margin-bottom:2rem;animation:fadeUp 0.5s ease both}
 .pill-dot{width:6px;height:6px;border-radius:50%;background:var(--mint);animation:pulse 1.6s ease infinite}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.3;transform:scale(1.5)}}
