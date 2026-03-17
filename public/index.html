@@ -194,8 +194,8 @@ footer p{font-size:12px;color:var(--slate)}
     <span class="nav-wordmark">Vidarix</span>
   </div>
   <div class="nav-right" id="nav-landing">
-    <button class="nav-link" onclick="scrollTo('cara-kerja')">Cara Kerja</button>
-    <button class="nav-link" onclick="scrollTo('harga')">Harga</button>
+    <button class="nav-link" onclick="scrollToSection('cara-kerja')">Cara Kerja</button>
+    <button class="nav-link" onclick="scrollToSection('harga')">Harga</button>
     <button class="nav-cta" onclick="openModal()">Mulai Gratis →</button>
   </div>
   <div class="nav-right" id="nav-dash" style="display:none;">
@@ -232,7 +232,7 @@ footer p{font-size:12px;color:var(--slate)}
     <p class="hero-sub">Vidarix membaca pola ribuan video TikTok yang viral, mendeteksi <strong>kenapa mereka berhasil</strong>, dan mengubahnya jadi script jualan siap pakai — dalam hitungan detik.</p>
     <div class="hero-ctas">
       <button class="btn-primary" onclick="openModal()">Mulai Gratis Sekarang →</button>
-      <button class="btn-ghost" onclick="scrollTo('cara-kerja')">Lihat Cara Kerja</button>
+      <button class="btn-ghost" onclick="scrollToSection('cara-kerja')">Lihat Cara Kerja</button>
     </div>
     <div class="hero-social">
       <div class="avatar-stack">
@@ -390,7 +390,7 @@ footer p{font-size:12px;color:var(--slate)}
     <p>Gratis untuk mulai. Pakai API key sendiri. Setup 2 menit.</p>
     <div class="final-ctas">
       <button class="btn-primary" onclick="openModal()" style="font-size:16px;padding:16px 36px;">Masuk Dashboard Sekarang →</button>
-      <button class="btn-ghost" onclick="scrollTo('cara-kerja')" style="font-size:16px;padding:16px 28px;">Pelajari Cara Kerja</button>
+      <button class="btn-ghost" onclick="scrollToSection('cara-kerja')" style="font-size:16px;padding:16px 28px;">Pelajari Cara Kerja</button>
     </div>
   </div>
 </section>
@@ -500,7 +500,7 @@ footer p{font-size:12px;color:var(--slate)}
 <script>
 let apiKey = localStorage.getItem('vidarix_key') || '';
 
-function scrollTo(id) { document.getElementById(id).scrollIntoView({behavior:'smooth'}); }
+function scrollToSection(id) { document.getElementById(id).scrollIntoView({behavior:'smooth'}); }
 
 function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
