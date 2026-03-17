@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vidarix — Video Analytics AI untuk TikTok Marketer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#1A3CFF;--blue-dark:#1230DD;--blue-dim:rgba(26,60,255,0.12);--mint:#00E5B4;--ink:#0A0E1A;--ink2:#131828;--ink3:#070B16;--slate:#6B7698;--border:rgba(255,255,255,0.07);--border-blue:rgba(26,60,255,0.25);--text:#EDF0FF;--display:'Plus Jakarta Sans',sans-serif;--body:'DM Sans',sans-serif;--mono:'DM Mono',monospace}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--ink);color:var(--text);font-family:var(--body);font-size:16px;line-height:1.65;overflow-x:hidden}
+.page{display:none;min-height:100vh}
+.page.active{display:block}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(1.5rem,5vw,4rem);height:64px;background:rgba(10,14,26,0.9);backdrop-filter:blur(20px);border-bottom:0.5px solid var(--border)}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;cursor:pointer}
+.nav-wordmark{font-family:var(--display);font-size:18px;font-weight:700;color:var(--text);letter-spacing:-0.02em}
+.nav-right{display:flex;align-items:center;gap:1.5rem}
+.nav-link{font-size:13px;color:var(--slate);text-decoration:none;cursor:pointer;background:none;border:none;font-family:var(--body)}
+.nav-link:hover{color:var(--text)}
+.nav-cta{font-size:13px;font-weight:600;padding:8px 20px;background:var(--blue);color:white;border-radius:8px;cursor:pointer;border:none;font-family:var(--body);transition:background 0.2s}
+.nav-cta:hover{background:var(--blue-dark)}
+.api-badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-family:var(--mono);padding:5px 12px;background:rgba(0,229,180,0.1);border:0.5px solid rgba(0,229,180,0.3);border-radius:20px;color:var(--mint);cursor:pointer}
+@media(max-width:640px){.nav-right .nav-link{display:none}}
+.container{max-width:1100px;margin:0 auto;padding:0 clamp(1.5rem,5vw,4rem)}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:300;align-items:center;justify-content:center;padding:1rem}
+.modal-overlay.open{display:flex}
+.modal{background:var(--ink2);border:0.5px solid var(--border-blue);border-radius:20px;padding:2.5rem;max-width:460px;width:100%}
+.modal h2{font-family:var(--display);font-size:22px;font-weight:800;margin-bottom:0.5rem;color:var(--text)}
+.modal-desc{font-size:14px;color:var(--slate);margin-bottom:1.5rem;line-height:1.6}
+.modal-input{width:100%;background:var(--ink3);border:0.5px solid var(--border);border-radius:10px;padding:12px 16px;font-size:14px;font-family:var(--mono);color:var(--text);margin-bottom:0.75rem}
+.modal-input:focus{outline:none;border-color:var(--border-blue)}
+.modal-hint{font-size:12px;color:var(--slate);margin-bottom:1.5rem}
+.modal-hint a{color:var(--blue);text-decoration:none}
+.modal-btns{display:flex;gap:10px}
+.modal-cancel{flex:1;padding:12px;font-size:14px;font-weight:500;background:transparent;color:var(--text);border:0.5px solid var(--border);border-radius:9px;cursor:pointer;font-family:var(--body)}
+.modal-confirm{flex:2;padding:12px;font-size:14px;font-weight:600;background:var(--blue);color:white;border:none;border-radius:9px;cursor:pointer;font-family:var(--body)}
+.modal-confirm:hover{background:var(--blue-dark)}
+
+/* LANDING */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:120px 0 80px;overflow:hidden;position:relative}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(26,60,255,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(26,60,255,0.05) 1px,transparent 1px);background-size:56px 56px;mask-image:radial-gradient(ellipse 80% 70% at 50% 30%,black 20%,transparent 100%)}
+.hero-glow{position:absolute;top:5%;left:50%;transform:translateX(-50%);width:700px;height:320px;background:radial-gradient(ellipse,rgba(26,60,255,0.14) 0%,transparent 70%);pointer-events:none}
+.pill{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:0.06em;color:var(--mint);border:0.5px solid rgba(0,229,180,0.3);padding:6px 14px;border-radius:100px;margin-bottom:2rem;animation:fadeUp 0.5s ease both}
+.pill-dot{width:6px;height:6px;border-radius:50%;background:var(--mint);animation:pulse 1.6s ease infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.3;transform:scale(1.5)}}
+.hero h1{font-family:var(--display);font-size:clamp(44px,8vw,96px);line-height:1;letter-spacing:-0.03em;font-weight:800;color:var(--text);margin-bottom:1.5rem;animation:fadeUp 0.5s 0.08s ease both}
+.accent{color:var(--blue)}.accent-mint{color:var(--mint)}
+.hero-sub{font-size:clamp(15px,1.8vw,18px);color:var(--slate);max-width:520px;line-height:1.7;margin-bottom:2.5rem;animation:fadeUp 0.5s 0.15s ease both}
+.hero-sub strong{color:var(--text);font-weight:500}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;animation:fadeUp 0.5s 0.22s ease both}
+.btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 28px;font-size:15px;font-weight:600;background:var(--blue);color:white;border-radius:9px;text-decoration:none;cursor:pointer;border:none;font-family:var(--body);transition:background 0.15s,transform 0.15s}
+.btn-primary:hover{background:var(--blue-dark);transform:translateY(-1px)}
+.btn-ghost{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 24px;font-size:15px;font-weight:500;background:transparent;color:var(--text);border:0.5px solid rgba(255,255,255,0.15);border-radius:9px;text-decoration:none;cursor:pointer;border:none;font-family:var(--body);border:0.5px solid rgba(255,255,255,0.15);transition:border-color 0.2s,background 0.2s}
+.btn-ghost:hover{border-color:rgba(255,255,255,0.3);background:rgba(255,255,255,0.04)}
+@media(max-width:480px){.hero-ctas{flex-direction:column}.btn-primary,.btn-ghost{width:100%}}
+.hero-social{display:flex;align-items:center;gap:14px;margin-top:2.5rem;animation:fadeUp 0.5s 0.3s ease both}
+.avatar-stack{display:flex}
+.av{width:28px;height:28px;border-radius:50%;background:var(--ink2);border:2px solid var(--ink);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;margin-right:-7px}
+.stars{color:#FFB800;font-size:13px;letter-spacing:-1px}
+.social-text{font-size:13px;color:var(--slate)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.ticker{background:var(--blue);padding:11px 0;overflow:hidden;white-space:nowrap;font-family:var(--display);font-size:13px;font-weight:600;letter-spacing:0.06em;color:white}
+.ticker-inner{display:inline-flex;animation:ticker 22s linear infinite}
+.ti{padding:0 32px}.ts{opacity:0.5}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.sec-tag{font-family:var(--mono);font-size:11px;letter-spacing:0.1em;color:var(--mint);display:block;margin-bottom:0.75rem}
+.sec-title{font-family:var(--display);font-size:clamp(32px,4.5vw,52px);font-weight:800;line-height:1.05;letter-spacing:-0.02em;margin-bottom:1rem}
+.sec-sub{font-size:16px;color:var(--slate);line-height:1.7;max-width:480px}
+.problem{padding:100px 0}
+.pain-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:3rem}
+.pain-card{background:var(--ink2);border:0.5px solid var(--border);border-radius:14px;padding:1.5rem}
+.pain-num{font-family:var(--mono);font-size:11px;color:var(--blue);margin-bottom:12px;letter-spacing:0.05em}
+.pain-card h3{font-family:var(--display);font-size:15px;font-weight:700;margin-bottom:8px;color:var(--text)}
+.pain-card p{font-size:13px;color:var(--slate);line-height:1.6}
+.solution{padding:100px 0;background:var(--ink2);border-top:0.5px solid var(--border);border-bottom:0.5px solid var(--border)}
+.sol-layout{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+@media(max-width:768px){.sol-layout{grid-template-columns:1fr;gap:40px}}
+.sol-points{display:flex;flex-direction:column;gap:24px;margin-top:2rem}
+.sol-pt{display:flex;gap:14px}
+.sol-icon{width:34px;height:34px;border-radius:8px;background:var(--blue-dim);border:0.5px solid var(--border-blue);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sol-icon svg{width:16px;height:16px}
+.sol-pt h4{font-family:var(--display);font-size:15px;font-weight:700;margin-bottom:4px;color:var(--text)}
+.sol-pt p{font-size:13px;color:var(--slate);line-height:1.6}
+.terminal{background:var(--ink3);border:0.5px solid var(--border);border-radius:14px;overflow:hidden}
+.term-bar{display:flex;gap:6px;padding:12px 16px;background:#0D1020;border-bottom:0.5px solid var(--border)}
+.td{width:10px;height:10px;border-radius:50%}
+.term-body{padding:1.25rem;display:flex;flex-direction:column;gap:10px}
+.term-block{border-radius:8px;padding:12px 14px;background:#0D1020}
+.term-block .tag{font-family:var(--mono);font-size:10px;color:var(--mint);margin-bottom:6px;display:block}
+.term-block p{font-size:13px;color:var(--text);line-height:1.65}
+.hl{color:var(--mint);font-weight:500}
+.cursor::after{content:'|';color:var(--mint);animation:blink 1s step-end infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.how{padding:100px 0}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:3rem;position:relative}
+.steps::after{content:'';position:absolute;top:22px;left:12.5%;right:12.5%;height:0.5px;background:linear-gradient(90deg,transparent,var(--border-blue),var(--border-blue),transparent)}
+@media(max-width:680px){.steps{grid-template-columns:1fr 1fr}.steps::after{display:none}}
+.step{padding:0 1rem;text-align:center}
+.step-num{width:44px;height:44px;border-radius:50%;background:var(--ink2);border:0.5px solid var(--border-blue);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;color:var(--blue);margin:0 auto 1rem;position:relative;z-index:1;font-weight:500}
+.step h3{font-family:var(--display);font-size:14px;font-weight:700;margin-bottom:6px;color:var(--text)}
+.step p{font-size:12px;color:var(--slate);line-height:1.6}
+.proof{padding:100px 0;background:var(--ink2);border-top:0.5px solid var(--border);border-bottom:0.5px solid var(--border)}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:3rem}
+@media(max-width:700px){.testi-grid{grid-template-columns:1fr}}
+.testi{background:var(--ink3);border:0.5px solid var(--border);border-radius:14px;padding:1.5rem}
+.testi-stars{color:#FFB800;font-size:13px;margin-bottom:12px}
+.testi p{font-size:14px;line-height:1.7;color:var(--text);margin-bottom:1.25rem}
+.testi-author{display:flex;align-items:center;gap:10px}
+.testi-av{width:36px;height:36px;border-radius:50%;background:var(--blue-dim);border:0.5px solid var(--border-blue);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#7090FF}
+.testi-author h5{font-size:13px;font-weight:600;color:var(--text)}
+.testi-author span{font-size:12px;color:var(--slate)}
+.pricing{padding:100px 0}
+.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:3rem}
+@media(max-width:700px){.price-grid{grid-template-columns:1fr}}
+.price-card{background:var(--ink2);border:0.5px solid var(--border);border-radius:16px;padding:2rem;position:relative;transition:transform 0.2s}
+.price-card:hover{transform:translateY(-3px)}
+.price-card.featured{border-color:rgba(26,60,255,0.5);background:linear-gradient(150deg,rgba(26,60,255,0.08) 0%,var(--ink2) 60%)}
+.feat-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--blue);color:white;font-family:var(--mono);font-size:10px;letter-spacing:0.08em;padding:4px 14px;border-radius:20px;white-space:nowrap}
+.price-plan{font-size:11px;font-family:var(--mono);letter-spacing:0.08em;color:var(--slate);margin-bottom:0.75rem;text-transform:uppercase}
+.price-amt{font-family:var(--display);font-size:48px;font-weight:800;line-height:1;margin-bottom:0.5rem;letter-spacing:-0.02em;color:var(--text)}
+.price-amt .per{font-family:var(--body);font-size:14px;color:var(--slate);font-weight:400}
+.price-desc{font-size:13px;color:var(--slate);margin-bottom:1.5rem;line-height:1.55}
+.price-feats{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:1.75rem}
+.price-feats li{font-size:13px;color:var(--text);display:flex;gap:10px;align-items:flex-start}
+.price-feats li::before{content:'✓';color:var(--mint);font-weight:700;flex-shrink:0}
+.price-feats li.off{color:var(--slate)}
+.price-feats li.off::before{content:'×';color:var(--slate)}
+.btn-plan{width:100%;padding:12px;font-size:14px;font-weight:600;border-radius:9px;border:none;cursor:pointer;text-align:center;display:block;text-decoration:none;font-family:var(--body);transition:opacity 0.2s}
+.btn-plan:hover{opacity:0.85}
+.btn-blue{background:var(--blue);color:white}
+.btn-outline{background:transparent;color:var(--text);border:0.5px solid var(--border)}
+.urgency{padding:60px 0;background:var(--blue);text-align:center}
+.urgency h2{font-family:var(--display);font-size:clamp(28px,4vw,48px);font-weight:800;color:white;margin-bottom:0.5rem;letter-spacing:-0.02em}
+.urgency p{color:rgba(255,255,255,0.75);font-size:15px;margin-bottom:1.75rem}
+.btn-white{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;font-size:15px;font-weight:700;background:white;color:var(--blue);border-radius:9px;cursor:pointer;border:none;font-family:var(--display);transition:transform 0.15s}
+.btn-white:hover{transform:scale(1.02)}
+.final{padding:120px 0;text-align:center;overflow:hidden}
+.final h2{font-family:var(--display);font-size:clamp(44px,7vw,88px);font-weight:800;line-height:1;letter-spacing:-0.03em;margin-bottom:1.5rem}
+.final p{color:var(--slate);font-size:16px;max-width:420px;margin:0 auto 2.5rem;line-height:1.7}
+.final-ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+@media(max-width:480px){.final-ctas{flex-direction:column;align-items:center}.final-ctas .btn-primary,.final-ctas .btn-ghost{width:100%;max-width:340px}}
+footer{border-top:0.5px solid var(--border);padding:2rem clamp(1.5rem,5vw,4rem);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+footer p{font-size:12px;color:var(--slate)}
+
+/* DASHBOARD */
+.dash-page{padding-top:64px}
+.dash-header{background:var(--ink2);border-bottom:0.5px solid var(--border);padding:1.5rem clamp(1.5rem,5vw,4rem);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.dash-header h1{font-family:var(--display);font-size:20px;font-weight:700;color:var(--text)}
+.dash-header p{font-size:13px;color:var(--slate);margin-top:2px}
+.dash-body{padding:2rem clamp(1.5rem,5vw,4rem);max-width:1100px;margin:0 auto}
+.agent-tabs{display:flex;gap:4px;margin-bottom:1.5rem;border-bottom:0.5px solid var(--border);overflow-x:auto}
+.agent-tab{padding:10px 18px;font-size:13px;cursor:pointer;color:var(--slate);background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-0.5px;white-space:nowrap;transition:color 0.15s;font-family:var(--body)}
+.agent-tab:hover{color:var(--text)}
+.agent-tab.active{color:var(--text);border-bottom-color:var(--blue);font-weight:600}
+.agent-panel{display:none}
+.agent-panel.active{display:block}
+.agent-card{background:var(--ink2);border:0.5px solid var(--border);border-radius:16px;padding:1.5rem}
+.agent-badge-label{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:3px 12px;border-radius:20px;background:var(--blue-dim);color:#7090FF;border:0.5px solid var(--border-blue);margin-bottom:1.25rem;font-family:var(--mono);letter-spacing:0.04em}
+.agent-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--mint)}
+.form-row{margin-bottom:1rem}
+.form-row label{display:block;font-size:13px;color:var(--slate);margin-bottom:6px}
+.form-row input,.form-row textarea{width:100%;font-size:14px;padding:10px 14px;border:0.5px solid var(--border);border-radius:10px;background:var(--ink3);color:var(--text);font-family:var(--body);resize:vertical;transition:border-color 0.2s}
+.form-row input:focus,.form-row textarea:focus{outline:none;border-color:var(--border-blue)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:520px){.form-grid{grid-template-columns:1fr}}
+.btn-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.btn-run{display:inline-flex;align-items:center;gap:8px;padding:11px 24px;font-size:14px;font-weight:600;background:var(--blue);color:white;border:none;border-radius:9px;cursor:pointer;transition:opacity 0.15s;font-family:var(--body)}
+.btn-run:hover{opacity:0.85}
+.btn-run:disabled{opacity:0.4;cursor:not-allowed}
+.spinner{width:14px;height:14px;border:2px solid transparent;border-top-color:currentColor;border-radius:50%;animation:spin 0.7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.btn-copy{display:none;align-items:center;gap:6px;padding:11px 18px;font-size:13px;font-weight:500;background:transparent;color:var(--text);border:0.5px solid var(--border);border-radius:9px;cursor:pointer;font-family:var(--body);transition:background 0.15s}
+.btn-copy:hover{background:var(--ink3)}
+.btn-copy.visible{display:inline-flex}
+.result-box{margin-top:1.5rem;border-top:0.5px solid var(--border);padding-top:1.5rem;display:none}
+.result-meta{font-size:12px;color:var(--slate);margin-bottom:10px;font-family:var(--mono)}
+.result-content{font-size:14px;line-height:1.8;color:var(--text);white-space:pre-wrap}
+.reveal{opacity:0;transform:translateY(22px);transition:opacity 0.5s ease,transform 0.5s ease}
+.reveal.in{opacity:1;transform:translateY(0)}
+@media(max-width:480px){.problem,.solution,.how,.proof,.pricing,.final{padding:64px 0}.urgency{padding:48px 0}.pain-grid{grid-template-columns:1fr}footer{flex-direction:column}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo" onclick="goHome()">
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#1A3CFF"/><path d="M8 24L16 8L24 24" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="11" y1="19" x2="21" y2="19" stroke="white" stroke-width="2" stroke-linecap="round"/><circle cx="25" cy="24" r="3" fill="#00E5B4"/></svg>
+    <span class="nav-wordmark">Vidarix</span>
+  </div>
+  <div class="nav-right" id="nav-landing">
+    <button class="nav-link" onclick="scrollTo('cara-kerja')">Cara Kerja</button>
+    <button class="nav-link" onclick="scrollTo('harga')">Harga</button>
+    <button class="nav-cta" onclick="openModal()">Mulai Gratis →</button>
+  </div>
+  <div class="nav-right" id="nav-dash" style="display:none;">
+    <span class="api-badge" onclick="openModal()">
+      <span style="width:6px;height:6px;border-radius:50%;background:var(--mint);flex-shrink:0;"></span>
+      API Key Aktif
+    </span>
+    <button class="nav-cta" onclick="goHome()" style="background:transparent;border:0.5px solid var(--border);color:var(--text);">← Beranda</button>
+  </div>
+</nav>
+
+<!-- API KEY MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <h2>Masukkan API Key</h2>
+    <p class="modal-desc">Vidarix menggunakan Anthropic API. API key tersimpan hanya di browser kamu — tidak dikirim ke server manapun.</p>
+    <input class="modal-input" type="password" id="key-input" placeholder="sk-ant-api03-..." />
+    <p class="modal-hint">Belum punya? <a href="https://console.anthropic.com" target="_blank">Daftar gratis di console.anthropic.com →</a></p>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeModal()">Batal</button>
+      <button class="modal-confirm" onclick="saveKey()">Simpan & Buka Dashboard →</button>
+    </div>
+  </div>
+</div>
+
+<!-- LANDING PAGE -->
+<div class="page active" id="page-landing">
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="container" style="position:relative;z-index:1;">
+    <div class="pill"><span class="pill-dot"></span>Platform Analitik TikTok #1 Indonesia</div>
+    <h1>Analisis Video<br><span class="accent">Viral.</span> Generate<br>Script. <span class="accent-mint">Jual Lebih.</span></h1>
+    <p class="hero-sub">Vidarix membaca pola ribuan video TikTok yang viral, mendeteksi <strong>kenapa mereka berhasil</strong>, dan mengubahnya jadi script jualan siap pakai — dalam hitungan detik.</p>
+    <div class="hero-ctas">
+      <button class="btn-primary" onclick="openModal()">Mulai Gratis Sekarang →</button>
+      <button class="btn-ghost" onclick="scrollTo('cara-kerja')">Lihat Cara Kerja</button>
+    </div>
+    <div class="hero-social">
+      <div class="avatar-stack">
+        <div class="av">RA</div><div class="av">DK</div><div class="av">SN</div><div class="av">MY</div><div class="av" style="font-size:9px;">+</div>
+      </div>
+      <div>
+        <div class="stars">★★★★★</div>
+        <span class="social-text">Dipercaya 3.200+ marketer TikTok Indonesia</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-inner">
+    <span class="ti">ANALISIS VIDEO VIRAL</span><span class="ti ts">✦</span><span class="ti">GENERATE SCRIPT AI</span><span class="ti ts">✦</span><span class="ti">5 HOOK DALAM 10 DETIK</span><span class="ti ts">✦</span><span class="ti">CTA HIGH-CONVERTING</span><span class="ti ts">✦</span><span class="ti">MARKETING ANGLE PRO</span><span class="ti ts">✦</span><span class="ti">ANALISIS VIDEO VIRAL</span><span class="ti ts">✦</span><span class="ti">GENERATE SCRIPT AI</span><span class="ti ts">✦</span><span class="ti">5 HOOK DALAM 10 DETIK</span><span class="ti ts">✦</span><span class="ti">CTA HIGH-CONVERTING</span><span class="ti ts">✦</span><span class="ti">MARKETING ANGLE PRO</span><span class="ti ts">✦</span>
+  </div>
+</div>
+
+<section class="problem">
+  <div class="container">
+    <span class="sec-tag">// masalah yang kamu hadapi</span>
+    <h2 class="sec-title reveal">Kenapa Konten<br>Kamu Gak Jual?</h2>
+    <p class="sec-sub reveal">Bukan salah produknya. Tapi karena hook, struktur, dan CTA-nya salah dari awal.</p>
+    <div class="pain-grid">
+      <div class="pain-card reveal"><div class="pain-num">01</div><h3>Bingung mau buat konten apa</h3><p>Scroll berjam-jam tapi tetap gak tahu video mana yang worth di-remake.</p></div>
+      <div class="pain-card reveal"><div class="pain-num">02</div><h3>Views ada, penjualan nol</h3><p>Ribuan orang nonton tapi gak ada yang klik. Hook lemah, CTA generik.</p></div>
+      <div class="pain-card reveal"><div class="pain-num">03</div><h3>Nulis script butuh waktu lama</h3><p>Satu script 30 detik makan waktu 2 jam. Padahal butuh puluhan konten.</p></div>
+      <div class="pain-card reveal"><div class="pain-num">04</div><h3>Gak tau kenapa video orang viral</h3><p>Kompetitor tembus jutaan views tapi kamu gak bisa reverse-engineer.</p></div>
+      <div class="pain-card reveal"><div class="pain-num">05</div><h3>Bujet iklan habis, ROAS rendah</h3><p>TikTok Ads boros karena creative gak dioptimasi. 3 detik pertama krusial.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="solution">
+  <div class="container">
+    <div class="sol-layout">
+      <div>
+        <span class="sec-tag">// solusinya</span>
+        <h2 class="sec-title reveal">AI yang Kerja<br>Buat Kamu</h2>
+        <p class="sec-sub reveal">Vidarix baca pola ribuan video viral, analisis strukturnya, lalu generate script jualan yang siap rekam.</p>
+        <div class="sol-points">
+          <div class="sol-pt reveal"><div class="sol-icon"><svg viewBox="0 0 16 16" fill="none" stroke="#7090FF" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 5v4l2.5 1.5" stroke-linecap="round"/></svg></div><div><h4>Temukan video viral relevan</h4><p>Cari berdasarkan niche atau kompetitor. Langsung tahu mana yang worth di-remake.</p></div></div>
+          <div class="sol-pt reveal"><div class="sol-icon"><svg viewBox="0 0 16 16" fill="none" stroke="#7090FF" stroke-width="1.5"><path d="M2 8h2l2-5 3 9 2-4h3" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><h4>Analisis mendalam 10 detik</h4><p>AI bedah hook, struktur, psikologi trigger — kenapa video itu convert.</p></div></div>
+          <div class="sol-pt reveal"><div class="sol-icon"><svg viewBox="0 0 16 16" fill="none" stroke="#7090FF" stroke-width="1.5"><path d="M4 12V6l4-4 4 4v6H9V9H7v3H4z" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><h4>Script siap rekam</h4><p>15–30 detik lengkap dengan hook, problem, solusi, proof, CTA.</p></div></div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="terminal">
+          <div class="term-bar"><div class="td" style="background:#FF5F57;"></div><div class="td" style="background:#FEBC2E;"></div><div class="td" style="background:#28C840;"></div></div>
+          <div class="term-body">
+            <div class="term-block"><span class="tag">// HOOK (0–3s)</span><p>"Ini kenapa skincare kamu <span class="hl">gak ngefek</span> — dan bukan salah kulitmu."</p></div>
+            <div class="term-block"><span class="tag">// PROBLEM (3–7s)</span><p>"Kamu pakai produk mahal tapi hasilnya nol karena <span class="hl">urutannya salah</span>."</p></div>
+            <div class="term-block"><span class="tag">// SOLUTION (7–15s)</span><p>"Serum ini harus dipakai <span class="hl">sebelum moisturizer</span>. Coba 7 hari."</p></div>
+            <div class="term-block"><span class="tag">// CTA (20–30s)</span><p class="cursor">"Link di bio. Stok terbatas — kemarin <span class="hl">sold out 2 jam</span>."</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="how" id="cara-kerja">
+  <div class="container">
+    <div style="text-align:center;max-width:520px;margin:0 auto 1rem;">
+      <span class="sec-tag">// cara kerjanya</span>
+      <h2 class="sec-title reveal">4 Langkah. Langsung Jalan.</h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal"><div class="step-num">01</div><h3>Input API Key</h3><p>Masukkan Anthropic API key. Gratis daftar, bayar per token yang dipakai.</p></div>
+      <div class="step reveal"><div class="step-num">02</div><h3>Pilih agent</h3><p>5 AI agent: analyzer, hook writer, script, angles & CTA.</p></div>
+      <div class="step reveal"><div class="step-num">03</div><h3>Input data</h3><p>Paste judul, caption, transcript, atau brief produkmu.</p></div>
+      <div class="step reveal"><div class="step-num">04</div><h3>Copy & pakai</h3><p>Hasil langsung muncul streaming. Copy, rekam, posting.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="proof">
+  <div class="container">
+    <div style="text-align:center;max-width:500px;margin:0 auto;">
+      <span class="sec-tag">// kata mereka</span>
+      <h2 class="sec-title reveal">Yang Sudah Merasakan Hasilnya.</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi reveal"><div class="testi-stars">★★★★★</div><p>"Sebelumnya habis 3 jam bikin satu script dan gak convert. Sekarang 10 menit sudah jadi, penjualan naik 3x lipat bulan pertama."</p><div class="testi-author"><div class="testi-av">RA</div><div><h5>Rizky Andrianto</h5><span>TikTok Affiliate, Skincare</span></div></div></div>
+      <div class="testi reveal"><div class="testi-stars">★★★★★</div><p>"Analisis hook-nya detail banget — aku langsung ngerti kenapa video kompetitorku kalah. Tool ini ngerti psychology TikTok."</p><div class="testi-author"><div class="testi-av">DS</div><div><h5>Dewi Santika</h5><span>Dropshipper, Fashion</span></div></div></div>
+      <div class="testi reveal"><div class="testi-stars">★★★★★</div><p>"ROAS TikTok Ads dari 1.2x naik ke 4.8x setelah pakai hook dari Vidarix. Beda banget kualitas creative-nya."</p><div class="testi-author"><div class="testi-av">MF</div><div><h5>Muhammad Faisal</h5><span>Affiliate Marketer</span></div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="pricing" id="harga">
+  <div class="container">
+    <div style="text-align:center;max-width:460px;margin:0 auto;">
+      <span class="sec-tag">// pilih paketmu</span>
+      <h2 class="sec-title reveal">Harga yang Masuk Akal.</h2>
+      <p class="sec-sub reveal" style="margin:0 auto;">Mulai gratis. Upgrade kapan saja. Tanpa kontrak.</p>
+    </div>
+    <div class="price-grid" style="margin-top:3rem;">
+      <div class="price-card reveal">
+        <div class="price-plan">Free</div>
+        <div class="price-amt">Rp0 <span class="per">/bln</span></div>
+        <p class="price-desc">Semua fitur tersedia. Pakai API key Anthropic sendiri.</p>
+        <ul class="price-feats">
+          <li>Semua 5 AI agent</li>
+          <li>Pakai API key sendiri</li>
+          <li>Unlimited generate</li>
+          <li class="off">API key included</li>
+          <li class="off">Priority support</li>
+        </ul>
+        <button class="btn-plan btn-outline" onclick="openModal()">Mulai Gratis</button>
+      </div>
+      <div class="price-card featured reveal">
+        <div class="feat-badge">COMING SOON</div>
+        <div class="price-plan">Pro</div>
+        <div class="price-amt">99K <span class="per">/bln</span></div>
+        <p class="price-desc">API key sudah include. Tidak perlu setup sendiri.</p>
+        <ul class="price-feats">
+          <li>Semua fitur Free</li>
+          <li>API key sudah include</li>
+          <li>Export PDF output</li>
+          <li>History tersimpan</li>
+          <li>Priority support</li>
+        </ul>
+        <button class="btn-plan btn-blue" style="opacity:0.5;cursor:not-allowed;" disabled>Segera Hadir</button>
+      </div>
+      <div class="price-card reveal">
+        <div class="price-plan">Agency</div>
+        <div class="price-amt">299K <span class="per">/bln</span></div>
+        <p class="price-desc">Untuk tim yang kelola banyak akun TikTok sekaligus.</p>
+        <ul class="price-feats">
+          <li>Semua fitur Pro</li>
+          <li>10 workspace</li>
+          <li>Team collaboration</li>
+          <li>Custom branding</li>
+          <li>API access</li>
+        </ul>
+        <button class="btn-plan btn-outline" style="opacity:0.5;cursor:not-allowed;" disabled>Segera Hadir</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="urgency">
+  <div class="container">
+    <h2>Mulai Gratis Sekarang</h2>
+    <p>Pakai API key sendiri — gratis, tidak ada biaya subscription.<br>Pro plan dengan API included segera hadir.</p>
+    <button class="btn-white" onclick="openModal()">Masuk Dashboard →</button>
+  </div>
+</section>
+
+<section class="final">
+  <div class="container">
+    <h2>Mulai Buat Konten<br>yang <span class="accent-mint">Benar-Benar</span><br><span class="accent">Menjual.</span></h2>
+    <p>Gratis untuk mulai. Pakai API key sendiri. Setup 2 menit.</p>
+    <div class="final-ctas">
+      <button class="btn-primary" onclick="openModal()" style="font-size:16px;padding:16px 36px;">Masuk Dashboard Sekarang →</button>
+      <button class="btn-ghost" onclick="scrollTo('cara-kerja')" style="font-size:16px;padding:16px 28px;">Pelajari Cara Kerja</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <svg width="24" height="24" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#1A3CFF"/><path d="M8 24L16 8L24 24" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="11" y1="19" x2="21" y2="19" stroke="white" stroke-width="2" stroke-linecap="round"/><circle cx="25" cy="24" r="3" fill="#00E5B4"/></svg>
+    <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:16px;color:#EDF0FF;">Vidarix</span>
+  </div>
+  <p>© 2025 Vidarix — Video Analytics AI untuk TikTok Marketer Indonesia</p>
+  <p>Syarat & Ketentuan · Privasi</p>
+</footer>
+</div>
+
+<!-- DASHBOARD -->
+<div class="page" id="page-dashboard">
+<div class="dash-page">
+  <div class="dash-header">
+    <div>
+      <h1>Vidarix Dashboard</h1>
+      <p>5 AI agent untuk analisis & optimasi konten TikTok kamu</p>
+    </div>
+    <span class="api-badge" onclick="openModal()">
+      <span style="width:6px;height:6px;border-radius:50%;background:var(--mint);flex-shrink:0;"></span>
+      Ganti API Key
+    </span>
+  </div>
+  <div class="dash-body">
+    <div class="agent-tabs">
+      <button class="agent-tab active" onclick="switchAgent(0)">Video Analyzer</button>
+      <button class="agent-tab" onclick="switchAgent(1)">Hook Rewriter</button>
+      <button class="agent-tab" onclick="switchAgent(2)">Script Generator</button>
+      <button class="agent-tab" onclick="switchAgent(3)">Marketing Angles</button>
+      <button class="agent-tab" onclick="switchAgent(4)">CTA Generator</button>
+    </div>
+
+    <div class="agent-panel active" id="ap-0">
+      <div class="agent-card">
+        <div class="agent-badge-label"><span class="agent-badge-dot"></span>Agent 1 — Performance Analyzer</div>
+        <div class="form-row"><label>Video title</label><input type="text" id="a0-title" placeholder="Contoh: POV: I tried this skincare for 30 days..."></div>
+        <div class="form-row"><label>Caption / hashtags</label><input type="text" id="a0-caption" placeholder="Contoh: #skincare #glowing #review"></div>
+        <div class="form-row"><label>Transcript / script video</label><textarea id="a0-transcript" rows="4" placeholder="Tempel transcript atau ringkasan konten video..."></textarea></div>
+        <div class="form-grid">
+          <div class="form-row"><label>Views</label><input type="text" id="a0-views" placeholder="2.3M"></div>
+          <div class="form-row"><label>Likes</label><input type="text" id="a0-likes" placeholder="150K"></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn-run" id="btn-0" onclick="runAgent(0)"><span>Analisis Video</span></button>
+          <button class="btn-copy" id="copy-0" onclick="copyResult(0)">Copy Hasil</button>
+        </div>
+        <div class="result-box" id="result-0"><div class="result-meta" id="meta-0"></div><div class="result-content" id="rt-0"></div></div>
+      </div>
+    </div>
+
+    <div class="agent-panel" id="ap-1">
+      <div class="agent-card">
+        <div class="agent-badge-label"><span class="agent-badge-dot"></span>Agent 2 — Hook Rewriter</div>
+        <div class="form-row"><label>Transcript / konten video asli</label><textarea id="a1-transcript" rows="5" placeholder="Paste transcript atau isi video yang ingin di-rewrite hook-nya..."></textarea></div>
+        <div class="btn-row">
+          <button class="btn-run" id="btn-1" onclick="runAgent(1)"><span>Generate 5 Hooks</span></button>
+          <button class="btn-copy" id="copy-1" onclick="copyResult(1)">Copy Hasil</button>
+        </div>
+        <div class="result-box" id="result-1"><div class="result-meta" id="meta-1"></div><div class="result-content" id="rt-1"></div></div>
+      </div>
+    </div>
+
+    <div class="agent-panel" id="ap-2">
+      <div class="agent-card">
+        <div class="agent-badge-label"><span class="agent-badge-dot"></span>Agent 3 — Script Generator</div>
+        <div class="form-row"><label>Nama produk</label><input type="text" id="a2-product" placeholder="Contoh: Serum Vitamin C Brightening"></div>
+        <div class="form-row"><label>Transcript / referensi konten</label><textarea id="a2-transcript" rows="4" placeholder="Paste transcript video referensi atau brief produk..."></textarea></div>
+        <div class="btn-row">
+          <button class="btn-run" id="btn-2" onclick="runAgent(2)"><span>Buat Script 15-30s</span></button>
+          <button class="btn-copy" id="copy-2" onclick="copyResult(2)">Copy Hasil</button>
+        </div>
+        <div class="result-box" id="result-2"><div class="result-meta" id="meta-2"></div><div class="result-content" id="rt-2"></div></div>
+      </div>
+    </div>
+
+    <div class="agent-panel" id="ap-3">
+      <div class="agent-card">
+        <div class="agent-badge-label"><span class="agent-badge-dot"></span>Agent 4 — Marketing Angle Generator</div>
+        <div class="form-row"><label>Produk / layanan</label><textarea id="a3-product" rows="3" placeholder="Deskripsikan produk kamu: nama, manfaat utama, target market..."></textarea></div>
+        <div class="btn-row">
+          <button class="btn-run" id="btn-3" onclick="runAgent(3)"><span>Generate 5 Angles</span></button>
+          <button class="btn-copy" id="copy-3" onclick="copyResult(3)">Copy Hasil</button>
+        </div>
+        <div class="result-box" id="result-3"><div class="result-meta" id="meta-3"></div><div class="result-content" id="rt-3"></div></div>
+      </div>
+    </div>
+
+    <div class="agent-panel" id="ap-4">
+      <div class="agent-card">
+        <div class="agent-badge-label"><span class="agent-badge-dot"></span>Agent 5 — CTA Generator</div>
+        <div class="form-row"><label>Produk / layanan</label><textarea id="a4-product" rows="3" placeholder="Deskripsikan produk kamu..."></textarea></div>
+        <div class="btn-row">
+          <button class="btn-run" id="btn-4" onclick="runAgent(4)"><span>Generate 5 CTAs</span></button>
+          <button class="btn-copy" id="copy-4" onclick="copyResult(4)">Copy Hasil</button>
+        </div>
+        <div class="result-box" id="result-4"><div class="result-meta" id="meta-4"></div><div class="result-content" id="rt-4"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+let apiKey = localStorage.getItem('vidarix_key') || '';
+
+function scrollTo(id) { document.getElementById(id).scrollIntoView({behavior:'smooth'}); }
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.getElementById('nav-landing').style.display = id === 'landing' ? 'flex' : 'none';
+  document.getElementById('nav-dash').style.display = id === 'dashboard' ? 'flex' : 'none';
+  window.scrollTo(0, 0);
+}
+function goHome() { showPage('landing'); }
+function openModal() {
+  document.getElementById('key-input').value = apiKey;
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal() { document.getElementById('modal').classList.remove('open'); }
+function saveKey() {
+  const k = document.getElementById('key-input').value.trim();
+  if (!k) { alert('Masukkan API key dulu.'); return; }
+  apiKey = k;
+  localStorage.setItem('vidarix_key', k);
+  closeModal();
+  showPage('dashboard');
+}
+document.getElementById('modal').addEventListener('click', e => { if(e.target.id === 'modal') closeModal(); });
+
+function switchAgent(idx) {
+  document.querySelectorAll('.agent-tab').forEach((t,i) => t.classList.toggle('active', i===idx));
+  document.querySelectorAll('.agent-panel').forEach((p,i) => p.classList.toggle('active', i===idx));
+}
+
+function getPrompt(idx) {
+  return [
+    `You are a TikTok performance marketing expert. Analyze this viral TikTok video and break down WHY it performs well.\n\nINPUT:\n- Title: ${document.getElementById('a0-title').value||'(not provided)'}\n- Caption: ${document.getElementById('a0-caption').value||'(not provided)'}\n- Transcript: ${document.getElementById('a0-transcript').value||'(not provided)'}\n- Views: ${document.getElementById('a0-views').value||'(not provided)'}\n- Likes: ${document.getElementById('a0-likes').value||'(not provided)'}\n\nOUTPUT:\n1. HOOK ANALYSIS — opening hook & why it stops scrolling\n2. CONTENT STRUCTURE — Opening / Middle / Closing\n3. PSYCHOLOGY TRIGGER — Curiosity / Fear / Desire / Social proof\n4. TARGET AUDIENCE\n5. WHY IT CONVERTS\n6. HOW TO IMPROVE\n\nBe specific and actionable. Use Indonesian.`,
+    `You are a TikTok direct-response copywriter. Rewrite this video's hook into 5 high-converting hooks.\n\nRULES: scroll-stopping, max 12 words each, emotional triggers, no generic phrases.\n\nINPUT: ${document.getElementById('a1-transcript').value||'(not provided)'}\n\nOUTPUT:\n1. Aggressive hook\n2. Curiosity hook\n3. Problem-based hook\n4. Benefit-driven hook\n5. Story-based hook\n\nUse Indonesian.`,
+    `You are a TikTok sales scriptwriter. Create a 15–30 second conversion-optimized script.\n\nRULES: simple language, fast pacing, native TikTok feel, not like an ad.\n\nINPUT:\n- Product: ${document.getElementById('a2-product').value||'(not provided)'}\n- Reference: ${document.getElementById('a2-transcript').value||'(not provided)'}\n\nOUTPUT:\n1. HOOK (0–3s)\n2. PROBLEM (3–7s)\n3. SOLUTION (7–15s)\n4. PROOF (15–20s)\n5. CTA (20–30s)\n\nUse Indonesian.`,
+    `You are a performance marketer. Generate 5 marketing angles for this product.\n\nINPUT: ${document.getElementById('a3-product').value||'(not provided)'}\n\nOUTPUT:\n1. Problem-solution angle\n2. Before-after angle\n3. Testimonial angle\n4. Hidden secret angle\n5. Comparison angle\n\nFor each: positioning statement + sample TikTok caption (max 150 chars). Use Indonesian.`,
+    `You are a direct response marketer. Generate 5 high-converting TikTok CTAs.\n\nRULES: max 10 words, urgent, clear.\n\nINPUT: ${document.getElementById('a4-product').value||'(not provided)'}\n\nOUTPUT:\n1. Hard sell CTA\n2. Soft CTA\n3. Urgency CTA\n4. Curiosity CTA\n5. Discount CTA\n\nFor each, add a brief usage note. Use Indonesian.`
+  ][idx];
+}
+
+const labels = ['Analisis Video','Generate 5 Hooks','Buat Script 15-30s','Generate 5 Angles','Generate 5 CTAs'];
+
+async function runAgent(idx) {
+  if (!apiKey) { openModal(); return; }
+  const btn = document.getElementById('btn-'+idx);
+  const box = document.getElementById('result-'+idx);
+  const rt = document.getElementById('rt-'+idx);
+  const meta = document.getElementById('meta-'+idx);
+  const cp = document.getElementById('copy-'+idx);
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span><span>Generating...</span>';
+  cp.classList.remove('visible');
+  box.style.display = 'block';
+  rt.textContent = '';
+  meta.textContent = '';
+  const t0 = Date.now();
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1500,
+        stream: true,
+        messages: [{ role: 'user', content: getPrompt(idx) }]
+      })
+    });
+    if (!res.ok) {
+      const e = await res.json();
+      throw new Error(e.error?.message || 'API Error ' + res.status);
+    }
+    const reader = res.body.getReader();
+    const dec = new TextDecoder();
+    let buf = '';
+    while (true) {
+      const {done, value} = await reader.read();
+      if (done) break;
+      buf += dec.decode(value, {stream: true});
+      const lines = buf.split('\n');
+      buf = lines.pop();
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        const d = line.slice(6).trim();
+        if (d === '[DONE]') continue;
+        try {
+          const p = JSON.parse(d);
+          if (p.type === 'content_block_delta' && p.delta?.text) rt.textContent += p.delta.text;
+        } catch {}
+      }
+    }
+    const elapsed = ((Date.now()-t0)/1000).toFixed(1);
+    meta.textContent = new Date().toLocaleString('id-ID',{dateStyle:'medium',timeStyle:'short'}) + ' · ' + elapsed + 's';
+    cp.classList.add('visible');
+  } catch(e) {
+    rt.textContent = '❌ Error: ' + e.message + '\n\nPastikan API key benar dan punya kredit di console.anthropic.com';
+  }
+  btn.disabled = false;
+  btn.innerHTML = '<span>' + labels[idx] + '</span>';
+}
+
+function copyResult(idx) {
+  const text = document.getElementById('rt-'+idx).textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const b = document.getElementById('copy-'+idx);
+    b.textContent = '✓ Tersalin!';
+    setTimeout(() => b.textContent = 'Copy Hasil', 2000);
+  });
+}
+
+const obs = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting) e.target.classList.add('in'); }), {threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
