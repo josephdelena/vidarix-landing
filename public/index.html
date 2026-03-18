@@ -401,7 +401,7 @@ footer p{font-size:12px;color:var(--slate)}
     <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:16px;color:#EDF0FF;">Vidarix</span>
   </div>
   <p>© 2025 Vidarix — Video Analytics AI untuk TikTok Marketer Indonesia</p>
-  <p>Syarat & Ketentuan · Privasi</p>
+  <p><button onclick="showPage('syarat')" style="background:none;border:none;color:var(--slate);cursor:pointer;font-family:var(--body);font-size:inherit;padding:0;text-decoration:underline;text-underline-offset:3px;">Syarat & Ketentuan</button> · <button onclick="showPage('privasi')" style="background:none;border:none;color:var(--slate);cursor:pointer;font-family:var(--body);font-size:inherit;padding:0;text-decoration:underline;text-underline-offset:3px;">Privasi</button></p>
 </footer>
 </div>
 
@@ -497,6 +497,127 @@ footer p{font-size:12px;color:var(--slate)}
 </div>
 </div>
 
+<!-- SYARAT & KETENTUAN -->
+<div class="page" id="page-syarat">
+<nav id="nav-syarat" style="display:none">
+  <div class="nav-logo" onclick="goHome()">
+    <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#1A3CFF"/><path d="M8 24L16 8L24 24" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="11" y1="19" x2="21" y2="19" stroke="white" stroke-width="2" stroke-linecap="round"/><circle cx="25" cy="24" r="3" fill="#00E5B4"/></svg>
+    <span class="nav-wordmark">Vidarix</span>
+  </div>
+  <div class="nav-right">
+    <button class="nav-cta" onclick="goHome()" style="background:transparent;border:0.5px solid var(--border);color:var(--text);">← Beranda</button>
+  </div>
+</nav>
+<div style="max-width:720px;margin:0 auto;padding:120px clamp(1.5rem,5vw,4rem) 80px;">
+  <span style="font-family:var(--mono);font-size:11px;letter-spacing:0.1em;color:var(--mint);display:block;margin-bottom:1rem;">LEGAL</span>
+  <h1 style="font-family:var(--display);font-size:clamp(32px,5vw,52px);font-weight:800;letter-spacing:-0.02em;margin-bottom:0.5rem;">Syarat & Ketentuan</h1>
+  <p style="color:var(--slate);font-size:14px;margin-bottom:3rem;">Terakhir diperbarui: Januari 2025</p>
+
+  <div style="display:flex;flex-direction:column;gap:2.5rem;">
+
+    <div>
+      <h2 style="font-family:var(--display);font-size:18px;font-weight:700;margin-bottom:0.75rem;color:var(--text);">1. Penerimaan Syarat</h2>
+      <p style="color:var(--slate);line-height:1.8;font-size:15px;">Dengan mengakses dan menggunakan Vidarix, kamu menyetujui untuk terikat oleh syarat dan ketentuan ini. Jika kamu tidak menyetujui syarat ini, harap tidak menggunakan layanan kami.</p>
+    </div>
+
+    <div>
+      <h2 style="font-family:var(--display);font-size:18px;font-weight:700;margin-bottom:0.75rem;color:var(--text);">2. Deskripsi Layanan</h2>
+      <p style="color:var(--slate);line-height:1.8;font-size:15px;">Vidarix adalah platform AI untuk analisis dan optimasi konten video TikTok. Layanan kami menggunakan model AI dari Anthropic (Claude) yang diakses melalui API key milik pengguna sendiri. Kami tidak menyimpan atau memproses API key kamu di server kami — semua tersimpan lokal di browser kamu.</p>
+    </div>
+
+    <div>
+      <h2 style="font-family:var(--display);font-size:18px;font-weight:700;margin-bottom:0.75rem;color:var(--text);">3. API Key & Tanggung Jawab Pengguna</h2>
+      <p style="color:var(--slate);line-height:1.8;font-size:15px;">Kamu bertanggung jawab penuh atas API key Anthropic yang kamu gunakan, termasuk biaya yang timbul dari penggunaannya. Vidarix tidak bertanggung jawab atas tagihan API yang melebihi ekspektasi pengguna. Jaga kerahasiaan API key kamu dan jangan bagikan kepada pihak lain.</p>
+    </div>
+
+    <div>
+      <h2 style="font-family:var(--display);font-size:18px;font-weight:700;margin-bottom:0.75rem;color:var(--text);">4. Penggunaan yang Diizinkan</h2>
+      <p style="color:var(--slate);line-height:1.8;font-size:15px;">Kamu boleh menggunakan Vidarix untuk keperluan komersial dan pribadi yang sah. Dilarang menggunakan layanan ini untuk membuat konten yang menyesatkan, melanggar hak cipta, atau melanggar kebijakan platform TikTok dan ketentuan layanan Anthropic.</p>
+    </div>
+
+    <div>
+      <h2 style="font-family:var(--display);font-size:18px;font-weight:700;margin-bottom:0.75rem;color:var(--text);">5. Batasan Tanggung Jawab</h2>
+      <p style="color:var(--slate);line-height:1.8;font-size:15px;">Vidarix disediakan "sebagaimana adanya" tanpa jaminan apapun. Kami tidak bertanggung jawab atas kerugian langsung maupun tidak langsung yang timbul dari penggunaan layanan, termasuk hasil konten yang dihasilkan AI yang tidak sesuai ekspektasi.</p>
+    </div>
+
+    <div>
+      <h2 style="font-family:var(--display);font-size:18px;font-weight:700;margin-bottom:0.75rem;color:var(--text);">6. Perubahan Layanan</h2>
+      <p style="color:var(--slate);line-height:1.8;font-size:15px;">Kami berhak mengubah, menangguhkan, atau menghentikan layanan kapan saja tanpa pemberitahuan sebelumnya. Kami juga dapat memperbarui syarat ini — perubahan signifikan akan dikomunikasikan melalui website.</p>
+    </div>
+
+    <div>
+      <h2 style="font-family:var(--display);font-size:18px;font-weight:700;margin-bottom:0.75rem;color:var(--text);">7. Kontak</h2>
+      <p style="color:var(--slate);line-height:1.8;font-size:15px;">Ada pertanyaan? Hubungi kami di <a href="mailto:hello@vidarix.com" style="color:var(--blue);text-decoration:none;">hello@vidarix.com</a></p>
+    </div>
+
+  </div>
+
+  <div style="margin-top:3rem;padding-top:2rem;border-top:0.5px solid var(--border);">
+    <button onclick="goHome()" style="display:inline-flex;align-items:center;gap:8px;background:var(--blue-dim);border:0.5px solid var(--border-blue);color:var(--text);padding:12px 24px;border-radius:9px;font-family:var(--body);font-size:14px;font-weight:500;cursor:pointer;">← Kembali ke Beranda</button>
+  </div>
+</div>
+</div>
+
+<!-- PRIVASI -->
+<div class="page" id="page-privasi">
+<nav id="nav-privasi" style="display:none">
+  <div class="nav-logo" onclick="goHome()">
+    <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#1A3CFF"/><path d="M8 24L16 8L24 24" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="11" y1="19" x2="21" y2="19" stroke="white" stroke-width="2" stroke-linecap="round"/><circle cx="25" cy="24" r="3" fill="#00E5B4"/></svg>
+    <span class="nav-wordmark">Vidarix</span>
+  </div>
+  <div class="nav-right">
+    <button class="nav-cta" onclick="goHome()" style="background:transparent;border:0.5px solid var(--border);color:var(--text);">← Beranda</button>
+  </div>
+</nav>
+<div style="max-width:720px;margin:0 auto;padding:120px clamp(1.5rem,5vw,4rem) 80px;">
+  <span style="font-family:var(--mono);font-size:11px;letter-spacing:0.1em;color:var(--mint);display:block;margin-bottom:1rem;">LEGAL</span>
+  <h1 style="font-family:var(--display);font-size:clamp(32px,5vw,52px);font-weight:800;letter-spacing:-0.02em;margin-bottom:0.5rem;">Kebijakan Privasi</h1>
+  <p style="color:var(--slate);font-size:14px;margin-bottom:3rem;">Terakhir diperbarui: Januari 2025</p>
+
+  <div style="display:flex;flex-direction:column;gap:2.5rem;">
+
+    <div style="background:rgba(0,229,180,0.06);border:0.5px solid rgba(0,229,180,0.2);border-radius:12px;padding:1.25rem 1.5rem;">
+      <p style="color:var(--mint);font-size:14px;line-height:1.7;font-weight:500;">🔒 Ringkasan singkat: Kami tidak mengumpulkan data pribadi kamu. API key tersimpan di browser kamu sendiri, bukan di server kami.</p>
+    </div>
+
+    <div>
+      <h2 style="font-family:var(--display);font-size:18px;font-weight:700;margin-bottom:0.75rem;color:var(--text);">1. Data yang Kami Kumpulkan</h2>
+      <p style="color:var(--slate);line-height:1.8;font-size:15px;">Vidarix dirancang dengan prinsip <em>privacy-first</em>. Kami tidak mengumpulkan, menyimpan, atau memproses data pribadi identifiable. API key Anthropic yang kamu masukkan hanya tersimpan di <code style="font-family:var(--mono);font-size:13px;background:var(--ink2);padding:2px 6px;border-radius:4px;">localStorage</code> browser kamu dan tidak pernah dikirim ke server kami.</p>
+    </div>
+
+    <div>
+      <h2 style="font-family:var(--display);font-size:18px;font-weight:700;margin-bottom:0.75rem;color:var(--text);">2. Konten yang Kamu Input</h2>
+      <p style="color:var(--slate);line-height:1.8;font-size:15px;">Teks atau deskripsi video yang kamu masukkan ke dalam AI agent dikirim langsung dari browser kamu ke API Anthropic — tidak melewati server Vidarix. Artinya, kami tidak pernah melihat atau menyimpan konten inputan kamu.</p>
+    </div>
+
+    <div>
+      <h2 style="font-family:var(--display);font-size:18px;font-weight:700;margin-bottom:0.75rem;color:var(--text);">3. Analytics & Cookies</h2>
+      <p style="color:var(--slate);line-height:1.8;font-size:15px;">Kami menggunakan analytics dasar (seperti jumlah pengunjung halaman) tanpa mengumpulkan informasi yang bisa mengidentifikasi kamu secara personal. Tidak ada cookie tracking pihak ketiga yang digunakan.</p>
+    </div>
+
+    <div>
+      <h2 style="font-family:var(--display);font-size:18px;font-weight:700;margin-bottom:0.75rem;color:var(--text);">4. Pihak Ketiga</h2>
+      <p style="color:var(--slate);line-height:1.8;font-size:15px;">Satu-satunya pihak ketiga yang menerima data kamu adalah <strong style="color:var(--text);">Anthropic</strong> (penyedia AI), sesuai kebijakan privasi mereka di <a href="https://anthropic.com/privacy" target="_blank" style="color:var(--blue);text-decoration:none;">anthropic.com/privacy</a>. Kamu bertransaksi langsung dengan Anthropic menggunakan API key kamu sendiri.</p>
+    </div>
+
+    <div>
+      <h2 style="font-family:var(--display);font-size:18px;font-weight:700;margin-bottom:0.75rem;color:var(--text);">5. Keamanan Data</h2>
+      <p style="color:var(--slate);line-height:1.8;font-size:15px;">Karena kami tidak menyimpan data kamu di server kami, risiko kebocoran data dari sisi kami sangat minimal. Namun tetap pastikan kamu menggunakan browser yang aman dan tidak mengakses Vidarix dari perangkat publik saat memasukkan API key.</p>
+    </div>
+
+    <div>
+      <h2 style="font-family:var(--display);font-size:18px;font-weight:700;margin-bottom:0.75rem;color:var(--text);">6. Hak Kamu</h2>
+      <p style="color:var(--slate);line-height:1.8;font-size:15px;">Kamu bisa menghapus API key yang tersimpan kapan saja melalui pengaturan browser (clear localStorage). Untuk pertanyaan terkait privasi, hubungi kami di <a href="mailto:hello@vidarix.com" style="color:var(--blue);text-decoration:none;">hello@vidarix.com</a></p>
+    </div>
+
+  </div>
+
+  <div style="margin-top:3rem;padding-top:2rem;border-top:0.5px solid var(--border);">
+    <button onclick="goHome()" style="display:inline-flex;align-items:center;gap:8px;background:var(--blue-dim);border:0.5px solid var(--border-blue);color:var(--text);padding:12px 24px;border-radius:9px;font-family:var(--body);font-size:14px;font-weight:500;cursor:pointer;">← Kembali ke Beranda</button>
+  </div>
+</div>
+</div>
+
 <script>
 let apiKey = localStorage.getItem('vidarix_key') || '';
 
@@ -507,6 +628,8 @@ function showPage(id) {
   document.getElementById('page-' + id).classList.add('active');
   document.getElementById('nav-landing').style.display = id === 'landing' ? 'flex' : 'none';
   document.getElementById('nav-dash').style.display = id === 'dashboard' ? 'flex' : 'none';
+  document.getElementById('nav-syarat').style.display = id === 'syarat' ? 'flex' : 'none';
+  document.getElementById('nav-privasi').style.display = id === 'privasi' ? 'flex' : 'none';
   window.scrollTo(0, 0);
 }
 function goHome() { showPage('landing'); }
